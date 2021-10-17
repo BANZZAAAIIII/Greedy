@@ -8,11 +8,13 @@ import heapq as pq
 def prims_algorithm(graph):
 	n = len(graph)
 
-	# distance represent the cost to reach a vertex at index. Cannot reach vertex if cost is inf
+	# Distance represent the cost to reach a vertex at index. Cannot reach vertex if cost is inf
 	distance = [math.inf for _ in range(0, n)]
-	nearest = [None for _ in range(0, n)]
 	distance[0] = 0
+
+	nearest = [None for _ in range(0, n)]
 	nearest[0] = 0
+	F = []
 
 	total_cost = 0
 	for _ in range(n):
@@ -25,18 +27,21 @@ def prims_algorithm(graph):
 			if 0 <= distance[i] < min_cost:
 				min_cost = distance[i]
 				edge = i
+		total_cost += min_cost
+
+		F.append(edge)
 		distance[edge] = -1  # This marks the edge/index as visited
-		nearest[_] = edge
+		# nearest[_] = edge
 		# Adds cost to distance for vertices that are now reachable from edge
 		for i in range(n):
 			if graph[edge][i] < distance[i]:
 				distance[i] = graph[edge][i]
-		total_cost += min_cost
+				nearest[i] = edge
 
 	print("kruskal's algorithm")
 	# print("\tPath")
 	# for i in range(1, n):
-	# 	print(f"\t{nearest[i]}")
+	# 	print(f"\t{nearest[i]} - {i}")
 	print(f"\tTotal cost: {total_cost}")
 
 
@@ -54,7 +59,7 @@ def kruskals_algorithm(graph):
 		pq.heappush(queue, e)
 
 	# Loop until we have a complete minimal spanning tree
-	while len(F) != N - 1:
+	while len(F) < N - 1:
 		# pops edge with lowest weight
 		(weight, i, j) = pq.heappop(queue)
 
@@ -69,7 +74,7 @@ def kruskals_algorithm(graph):
 
 	total_cost = 0
 	print("kruskal's algorithm")
-	print("\tedges \t weight")
+	print("\tedges \t\t weight")
 	for e in F:
 		print("\t{:>4} - {:<7} W:{:<10}".format(e[1], e[2], e[0]))
 		total_cost += e[0]

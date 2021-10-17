@@ -58,22 +58,36 @@ class DisjointSet:
 	https://www.techiedelight.com/disjoint-set-data-structure-union-find-algorithm/
 	"""
 	_disjoint_set = {}
+	_rank = {}  # Represents the depth
 
-	def createSet(self, N):
-		""" Creates set of N disjointed sets """
-		for i in range(N+1):
+	def createSet(self, n):
+		""" Creates set of n disjointed sets """
+		for i in range(n + 1):
 			self._disjoint_set[i] = i
+			self._rank[i] = 0
 
-	def find(self, k):
+	def find(self, i):
 		""" Finds which subset a element is in """
-		if self._disjoint_set[k] == k:
-			return k
+		if self._disjoint_set[i] == i:
+			return i
 		else:
-			return self.find(self._disjoint_set[k])
+			return self.find(self._disjoint_set[i])
 
 	def union(self, set1, set2):
 		""" Joins two subsets combining them to a single subset """
-		root1 = self.find(set1)
-		root2 = self.find(set2)
+		p = self.find(set1)
+		q = self.find(set2)
 
-		self._disjoint_set[root1] = root2
+		# Returns if both sets have the same root
+		if p == q:
+			return
+
+		# Merges the subset with the least rank with the other subset
+		if self._rank[p] > self._rank[q]:
+			self._disjoint_set[q] = p
+		elif self._rank[p] < self._rank[q]:
+			self._disjoint_set[p] = q
+		else:  # Both subsets have the same rank
+			self._disjoint_set[p] = q
+			self._rank[q] = self._rank[q] + 1
+
