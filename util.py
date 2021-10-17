@@ -42,6 +42,15 @@ def create_matrix(dataset):
 	return matrix
 
 
+def matrix_to_edges(matrix):
+	edge_list = []
+	for r, row in enumerate(matrix):
+		for c, col in enumerate(row):
+			if matrix[r][c] != 0 and matrix[r][c] != math.inf:
+				edge_list.append((matrix[r][c], r, c))
+	return edge_list
+
+
 class DisjointSet:
 	"""
 	Simple disjoint set datastructures implementation
