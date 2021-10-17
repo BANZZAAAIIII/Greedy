@@ -40,3 +40,31 @@ def create_matrix(dataset):
 	# 	print(d)
 
 	return matrix
+
+
+class DisjointSet:
+	"""
+	Simple disjoint set datastructures implementation
+	Based on the code and information from techiedelight:
+	https://www.techiedelight.com/disjoint-set-data-structure-union-find-algorithm/
+	"""
+	_disjoint_set = {}
+
+	def createSet(self, N):
+		""" Creates set of N disjointed sets """
+		for i in range(N+1):
+			self._disjoint_set[i] = i
+
+	def find(self, k):
+		""" Finds which subset a element is in """
+		if self._disjoint_set[k] == k:
+			return k
+		else:
+			return self.find(self._disjoint_set[k])
+
+	def union(self, set1, set2):
+		""" Joins two subsets combining them to a single subset """
+		root1 = self.find(set1)
+		root2 = self.find(set2)
+
+		self._disjoint_set[root1] = root2
