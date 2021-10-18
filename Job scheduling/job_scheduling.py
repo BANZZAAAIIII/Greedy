@@ -15,10 +15,9 @@ def job_scheduling(jobs) -> List:
         2. Loops through the jobs list, this will select jobs with the most profit first
         3. If there is a slot available on the jobs deadline or before the given deadline the job is added to the schedule
         4. Finished once there are no more slots or no more jobs can be added to the schedule
-    
     '''
 
-    solution = [None] * len(jobs)   # Initialize all the positions
+    schedule = [None] * len(jobs)   # Initialize all the positions
 
     def sort():
         '''Sort jobs based on profit in decreasing value'''
@@ -31,26 +30,20 @@ def job_scheduling(jobs) -> List:
             or before the given deadline
         '''
         for i in range(min(job.deadline - 1, len(jobs) - 1), -1, -1):
-            if solution[i] is None:
-                solution[i] = job
+            if schedule[i] is None:
+                schedule[i] = job
                 break
-
-
-    def check_solution() -> bool:
-        ''' Check if problem have been solved
-            Occurs if every slot in the schedule have been fullfilled
-        '''
-        return None not in solution
 
     def scheduling():
         for i in range(len(jobs)):
             check_feasibility(jobs[i])
-            if check_solution():    # Check if there are slots available
+            if None not in schedule:    # Check if there are slots available
                 break
 
     sort()  # Sort jobs decreasing profit 
     scheduling()    # Schedules jobs
-    return [i for i in solution if i] # Removes slots that could not be filled and returns schedule
+    # Removes slots that could not be filled and returns schedule
+    return [i for i in schedule if i]
 
 
 def main():
