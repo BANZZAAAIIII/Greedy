@@ -14,7 +14,6 @@ def prims_algorithm(graph):
 
 	nearest = [None for _ in range(0, n)]
 	nearest[0] = 0
-	F = []
 
 	total_cost = 0
 	for _ in range(n):
@@ -29,9 +28,7 @@ def prims_algorithm(graph):
 				edge = i
 		total_cost += min_cost
 
-		F.append(edge)
 		distance[edge] = -1  # This marks the edge/index as visited
-		# nearest[_] = edge
 		# Adds cost to distance for vertices that are now reachable from edge
 		for i in range(n):
 			if graph[edge][i] < distance[i]:
@@ -39,9 +36,9 @@ def prims_algorithm(graph):
 				nearest[i] = edge
 
 	print("kruskal's algorithm")
-	# print("\tPath")
-	# for i in range(1, n):
-	# 	print(f"\t{nearest[i]} - {i}")
+	print("\tPath")
+	for i in range(1, n):
+		print(f"\t{nearest[i]} - {i}")
 	print(f"\tTotal cost: {total_cost}")
 
 
@@ -91,8 +88,8 @@ def main():
 		[math.inf, math.inf, 2, 5, 0]
 	]
 	matrix = util.create_matrix(fm.get_data(True, False))
-	# prims_algorithm(matrix_book)
-	prims_algorithm(matrix)
+	prims_algorithm(matrix_book)
+	# prims_algorithm(matrix)
 
 	# Contains the edges to the graph from the book and the number of vertices in the graph
 	# edges: weight, v_1, v_2
