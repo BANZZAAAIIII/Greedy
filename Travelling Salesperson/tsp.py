@@ -6,6 +6,29 @@ import random
 import filemanager as fm
 
 
+def tsp_dynamic(matrix):
+	def tsp(start, set):
+		if graph[start][set] != -1:
+			return graph[start][set]
+
+		for i in range(set):
+			current_cost = matrix[start][i]
+			other_cost = tsp(i, i)
+
+			total_cost = current_cost + other_cost
+
+		return total_cost
+
+	size = len(matrix)
+	graph = [[-1 for _ in range(0, size+1)] for _ in range(0, size+1)]
+	path = [[-1 for _ in range(0, size+1)] for _ in range(0, size+1)]
+
+	for i in range(size):
+		graph[i][0] = matrix[i][0]
+
+	print(tsp(0, size))
+
+
 def tsp_greedy(matrix):
 	n = len(matrix)
 	total_cost = 0    # The current total cost of path
@@ -50,9 +73,11 @@ def create_matrix(dataset):
 def main():
 	dataset = fm.get_data(False, True)
 	matrix = create_matrix(dataset)
-	cost, route = tsp_greedy(matrix)
-	print(f"route: {route}")
-	print(f"min cost: {cost}")
+	# cost, route = tsp_greedy(matrix)
+	# print(f"route: {route}")
+	# print(f"min cost: {cost}")
+
+	tsp_dynamic(matrix)
 
 
 
