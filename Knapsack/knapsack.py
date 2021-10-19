@@ -1,37 +1,5 @@
-'''
-Use the weights, profits and knapsack capacity from 
-the P08 dataset to find the optimal packing in two ways
-1. With the fractional knapsack problem
-2. With the binary (0/1) knapsack problem
-
-# optimal profit 13 549 094
-'''
-from typing import List
 from item import Item
-from random import random
-from math import floor
-
-def read(filename):
-    try:
-        with open(f"Knapsack\data\{filename}.txt", 'r') as file:
-            result =  file.readlines()
-            file.close()
-        return list(map(int, result)) # Map string to int
-    except FileNotFoundError:
-        print("File was not found, this should never happen")
-
-def setup():
-    capacity = read("capacity")[0]  # LMAO
-    solution = read("solution") # More lmao
-    profits = read("item_profits")
-    weights = read("item_weights")
-
-    items = []
-    for profit, weight in zip(profits, weights):
-        items.append(Item(profit, weight))
-
-    return capacity, solution, items, weights, profits
-
+from filemanager import setup
 
 def fractional_knapsack(capacity, items):
     '''
@@ -40,6 +8,9 @@ def fractional_knapsack(capacity, items):
         until no more items fit
         Assumption: Each item can only be added to the knapsack once
     ''' 
+    if capacity <= 0 or len(items) <= 0:
+        return None
+
     weight = 0
     knapsack = []
     def sort():
@@ -73,6 +44,34 @@ def fractional_knapsack(capacity, items):
     
     return knapsack
 
+
+def binary_knapsack(capacity, items):
+
+    knapsack = []
+    def binary(capacity, items, index):
+
+        if capacity <= 0 or index == 0:
+            return 0
+
+        # Skip items with weight larger than capacity
+        if items[index - 1].weight > capacity:
+            return binary(capacity, items, index - 1)
+        else:
+            return max(items[index - 1].profit + binary(
+                    capacity - items[index - 1].weight, items, index - 1),
+                    binary(capacity, items, index - 1))
+            # Creates a list of the items added to the knapsack
+            # temp1 =  items[index - 1].profit + binary(
+            #     capacity - items[index - 1].weight, items, index - 1)
+            # temp2 = binary(capacity, items, index - 1)
+            # if temp1 >= temp2:
+            #     knapsack.append(items[index - 1])
+            #     return temp1
+            # else:
+            #     return temp2
+    return knapsack, binary(capacity, items, len(items))
+
+
 def calc_tests(items):
     weight = 0
     profit = 0
@@ -83,14 +82,18 @@ def calc_tests(items):
 
 
 def main():
+    # capacity = 30
+    # items = [Item(50, 5), Item(60, 10), Item(120, 20)]
     capacity, solution, items, weights, profits = setup()
-    tempItems = [Item(5, 1), Item(5, 2), Item(5, 3), Item(5, 4), Item(5, 5)]
-    tempItems = sorted(tempItems, key=lambda _: random())
-    item = fractional_knapsack(capacity, items)
+    item = fractional_knapsack(capacity, list(items))
     profit, weight = calc_tests(item)
     print(f"Profit: {profit}, Weight: {weight}")
     print(f"Remaining capacity: {capacity - weight}")
-    # print(*item, sep='\n')
-    # optimal profit 13 549 094
+
+
+    knapsack, profit = binary_knapsack(capacity, list(items))
+    # print(*knapsack, sep='\n')
+    print(f"Binary profit: {profit}")
+
 if __name__ == "__main__":
     main()
