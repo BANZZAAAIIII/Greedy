@@ -46,6 +46,13 @@ def fractional_knapsack(capacity, items):
 
 
 def binary_knapsack(capacity, items):
+    '''
+        0-1 dynamic solver, bottom up
+        Starts at the back it item list
+        Max compares two paramter
+            First parameter includes the indexed item in the knapsack
+            Second paramter excludes the indexed item in the knapsack
+    '''
 
     knapsack = []
     def binary(capacity, items, index):
