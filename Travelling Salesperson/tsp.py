@@ -68,25 +68,13 @@ def tsp_greedy(matrix):
 	return total_cost, path
 
 
-def create_matrix(dataset):
-	n = len(dataset)
-	matrix = [[-1 for _ in range(0, n)] for _ in range(0, n)]
-
-	for row, data in enumerate(dataset):
-		dist_from_x = util.calculateDistance(data["lat"], data["lng"])
-		for col in range(0, n):
-			city = dataset[col]
-			matrix[row][col] = int(dist_from_x(city["lat"], city["lng"]))
-
-	# for d in matrix:
-	# 	print(d)
-
-	return matrix
-
-
 def main():
 	dataset = fm.get_data(True, False)
-	matrix_long = create_matrix(dataset)
+	matrix_long = util.create_matrix(dataset)
+
+	dataset = fm.get_data(False, True)
+	matrix_short = util.create_matrix(dataset)
+
 	matrix_book = [
 		[0, 2, 9, math.inf],
 		[1, 0, 6, 4],
@@ -98,10 +86,11 @@ def main():
 	print(f"\troute: {route}")
 	print(f"\tmin cost: {cost}")
 
-	# print("TSP Dynamic algorithm")
-	# cost2, route2 = tsp_dynamic(matrix)
-	# print(f"\troute: {route2}")
-	# print(f"\tmin cost: {cost2}")
+
+	print("TSP Dynamic algorithm")
+	cost2, route2 = tsp_dynamic(matrix_short)
+	print(f"\troute: {route2}")
+	print(f"\tmin cost: {cost2}")
 
 
 if __name__ == '__main__':
