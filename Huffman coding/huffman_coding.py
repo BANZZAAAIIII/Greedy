@@ -47,8 +47,6 @@ class HuffmanEncoder:
         # Finds the characters and their frequency
         self.frequency_analysis()
 
-        # Convert list of symbols into a binary Tree structure
-        # Step 1: Generate list of Nodes...
         # Generate a list of nodes
         self.tree = []
         for char in self.chars.keys():
