@@ -32,12 +32,12 @@ def tsp_dynamic(matrix):
 	minimal_cost = travel(0, s)
 
 	# We need to look though p to find the optimal path
-	n = 0
-	optimal_path = [n]
-	while s:
-		n = p[(n, s)]           # From current_v vertex and set we get the index to the vertex with lowest cost
-		optimal_path.append(n)  # Append this vertex to the optimal path
-		s = s.difference({n})   # And remove it from the set
+	v = 0
+	optimal_path = [v]
+	for _ in range(len(s)):
+		v = p[(v, s)]           # From current_v vertex and set we get the index to the vertex with lowest cost
+		optimal_path.append(v)  # Append this vertex to the optimal path
+		s = s.difference({v})   # And remove it from the set
 
 	return minimal_cost, optimal_path
 
@@ -72,8 +72,10 @@ def main():
 	dataset = fm.get_data(True, False)
 	matrix_long = util.create_matrix(dataset)
 
-	dataset = fm.get_data(False, True)
-	matrix_short = util.create_matrix(dataset)
+	n = len(matrix_long) // 12
+	matrix_long_short = matrix_long[:n]
+	for i, x in enumerate(matrix_long_short):
+		matrix_long_short[i] = x[:n]
 
 	matrix_book = [
 		[0, 2, 9, math.inf],
@@ -81,16 +83,16 @@ def main():
 		[math.inf, 7, 0, 8],
 		[6, 3, math.inf, 0]
 	]
-	cost, route = tsp_greedy(matrix_long)
+
+	cost, route = tsp_greedy(matrix_long_short)
 	print("TSP Greedy algorithm")
 	print(f"\troute: {route}")
 	print(f"\tmin cost: {cost}")
 
-
 	print("TSP Dynamic algorithm")
-	cost2, route2 = tsp_dynamic(matrix_short)
-	print(f"\troute: {route2}")
-	print(f"\tmin cost: {cost2}")
+	cost, route = tsp_dynamic(matrix_long_short)
+	print(f"\troute: {route}")
+	print(f"\tmin cost: {cost}")
 
 
 if __name__ == '__main__':
